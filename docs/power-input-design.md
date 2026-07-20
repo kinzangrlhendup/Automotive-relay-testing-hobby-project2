@@ -39,34 +39,35 @@ The fuse protects the wiring and PCB against sustained fault current. It does no
 
 ## 4. Reverse-polarity MOSFET
 
-### Selected prototype part
+### Selected simulation part
 
-I selected the FQP47P06 as the initial through-hole prototype device because it provides:
+I initially considered the FQP47P06, but it was not available in my LTspice component library. I selected the RSS060P05 model for the first simulation because it provides:
 
 - P-channel operation for a simple high-side protection circuit
-- 60 V drain-to-source rating
-- Maximum on-resistance of 26 mΩ at a gate-to-source voltage of −10 V
-- TO-220 package that is convenient for initial bench work
-- Maximum gate-to-source rating of ±25 V
+- 45 V drain-to-source rating
+- Maximum on-resistance of 36 mΩ at a gate-to-source voltage of −10 V
+- 6 A continuous drain-current rating under the manufacturer's stated conditions
+- Maximum gate-to-source rating of ±20 V
+- An available LTspice model
 
 At the estimated 1.4 A operating current:
 
 \[
-V_{DS}=IR_{DS(on)}=1.4\times0.026=0.0364\text{ V}
+V_{DS}=IR_{DS(on)}=1.4\times0.036=0.0504\text{ V}
 \]
 
 \[
-P=I^2R=1.4^2\times0.026=0.051\text{ W}
+P=I^2R=1.4^2\times0.036=0.071\text{ W}
 \]
 
 At the 2 A fuse rating:
 
 \[
-V_{DS}=2\times0.026=0.052\text{ V}
+V_{DS}=2\times0.036=0.072\text{ V}
 \]
 
 \[
-P=2^2\times0.026=0.104\text{ W}
+P=2^2\times0.036=0.144\text{ W}
 \]
 
 These calculations use the maximum stated on-resistance at the specified gate drive and room-temperature test conditions. The resistance will increase with junction temperature, so I will verify the real voltage drop and case temperature during testing.
@@ -77,13 +78,31 @@ For comparison, a series diode dropping an assumed 0.4 V at 1.4 A would dissipat
 P=VI=0.4\times1.4=0.56\text{ W}
 \]
 
-The MOSFET should therefore produce much less voltage loss and heat in normal operation.
+The MOSFET should therefore produce much less voltage loss and heat in normal operation. Its voltage-rating margin relative to the SMCJ18A maximum stated clamp voltage is:
+
+\[
+\text{Voltage-rating margin}=\frac{45}{29.2}=1.54
+\]
+
+This is acceptable for the first controlled simulation, but it is less margin than the original 60 V candidate. I will not expose the physical prototype to unsuppressed vehicle transients until I have validated the protection arrangement.
+
+The active automotive-grade physical candidate is RSS060P05HZG. It is an SOP8 surface-mount part rather than a TO-220 through-hole part, so I must also consider assembly method and PCB heat spreading before freezing the physical selection.
 
 ### Gate protection
 
-I will initially use a 10 kΩ gate pull-down and a 12 V Zener diode between gate and source. The Zener cathode will connect to the MOSFET source and its anode to the gate. Its purpose is to keep the magnitude of the negative gate-to-source voltage below the MOSFET's ±25 V absolute maximum during positive input transients.
+I will initially use a 10 kΩ gate pull-down and an EDZV12B 12 V Zener diode between gate and source. The Zener cathode will connect to the MOSFET source and its anode to the gate. Its purpose is to keep the magnitude of the negative gate-to-source voltage below the MOSFET's ±20 V absolute maximum during positive input transients.
 
-The exact gate-Zener part has not yet been selected. I will add its datasheet only after checking its tolerance, test current, pulse capability and package.
+The EDZV12B is specified at 11.74 V to 12.24 V at a 5 mA test current and has a 150 mW power-dissipation rating. At the TVS maximum stated clamp voltage, a first-order estimate is:
+
+\[
+I_Z\approx\frac{29.2-12}{10\,000}=1.72\text{ mA}
+\]
+
+\[
+P_Z\approx12\times0.00172=20.6\text{ mW}
+\]
+
+This estimated power is below 150 mW. The actual Zener voltage at 1.72 mA is not guaranteed by the 5 mA datasheet value, so I will inspect the simulated gate voltage and verify it on the bench. The automotive-grade EDZVFH12B has similar nominal electrical ratings and remains a candidate for the physical PCB.
 
 ## 5. TVS-diode selection
 
@@ -98,7 +117,7 @@ I selected the SMCJ18A for initial evaluation because its key nominal ratings ar
 
 The reverse standoff voltage is higher than the intended 16 V maximum normal input, so the TVS should not normally conduct. An appreciably lower standoff voltage could begin conducting during legitimate high battery or charging voltage. A much higher standoff voltage would allow a larger transient to reach the downstream circuits.
 
-Because the maximum specified clamp is 29.2 V under the stated pulse condition, I must rate downstream components for more than 29.2 V. This is why I am using a 60 V MOSFET and proposing 50 V capacitors rather than 16 V or 25 V capacitors.
+Because the maximum specified clamp is 29.2 V under the stated pulse condition, I must rate downstream components for more than 29.2 V. The selected simulation MOSFET is rated at 45 V and the proposed capacitors are rated at 50 V rather than 16 V or 25 V. I will retain the option of a 60 V or higher MOSFET if transient testing shows that the 45 V margin is inadequate.
 
 The TVS must be placed close to the protected input and connected to a short, low-inductance ground return. Long tracks would add inductive voltage during a fast transient and reduce the effectiveness of the clamp.
 
@@ -135,10 +154,10 @@ This gives approximately 71% margin above the TVS maximum clamp stated for its r
 | Reference | Provisional selection | Design purpose | Status |
 |---|---|---|---|
 | F1 | 2 A replaceable fuse | Sustained short-circuit protection | Fuse series not selected |
-| Q1 | FQP47P06 | Reverse-polarity protection | Selected for simulation |
+| Q1 | RSS060P05 model | Reverse-polarity protection | Selected for simulation; RSS060P05HZG is the active physical candidate |
 | R1 | 10 kΩ | MOSFET gate pull-down | Provisional |
 | D1 | SMCJ18A | Positive-transient suppression | Selected for evaluation |
-| D2 | 12 V Zener | MOSFET gate protection | Exact part not selected |
+| D2 | EDZV12B 12 V Zener model | MOSFET gate protection | Selected for simulation; physical package under review |
 | C1 | 100 nF, 50 V ceramic | High-frequency filtering | Exact part not selected |
 | C2 | 47 µF, 50 V electrolytic | Local bulk filtering | Exact part not selected |
 
