@@ -1,0 +1,26 @@
+# KiCad temporary and user-specific files
+*-backups/
+*.kicad_prl
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.lck
+~*.lck
+
+# LTspice generated files
+*.raw
+*.log
+*.net
+*.op.raw
+
+# Firmware build output
+build/
+.pio/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# General temporary files
+*.tmp
+*.bak
+*~
