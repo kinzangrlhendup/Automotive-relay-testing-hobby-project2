@@ -57,3 +57,15 @@ I will use this document to record the reasoning behind the important technical 
 **Limitation:** Selecting a TVS part does not by itself prove compliance with an automotive transient standard. The PCB layout, source impedance, pulse energy and downstream component ratings also matter.
 
 **Status:** Provisional until the transient model and test conditions are defined.
+
+## DD-007 — Use available ROHM models for the first LTspice schematic
+
+**Decision:** I will use the RSS060P05 model for Q1 and the EDZV12B model for the MOSFET gate clamp in the first LTspice simulation.
+
+**Reason:** These models are available in my LTspice installation and have the required device types. The RSS060P05 is a P-channel MOSFET rated at −45 V and −6 A. The EDZV12B is a 12 V Zener diode, so it is suitable for evaluating the gate-clamp function.
+
+**Important distinction:** The EDZV12B is only the low-energy gate-protection diode. It is not a substitute for the SMCJ18A input TVS, which must absorb much more transient energy.
+
+**Physical-part note:** The active automotive-grade MOSFET option is RSS060P05HZG in an SOP8 package. The automotive-grade Zener option is EDZVFH12B in a very small SOD-523 package. I will confirm that these packages are practical to assemble before freezing the PCB bill of materials.
+
+**Status:** Accepted for simulation. Physical parts remain provisional.
