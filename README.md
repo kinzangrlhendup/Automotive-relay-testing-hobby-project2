@@ -62,7 +62,18 @@ hardware/socket-adapters/   Interchangeable relay socket designs
 firmware/                   Embedded software
 mechanical/                 Enclosure and mechanical drawings
 test-data/                  Calibration and experimental results
+references/                 Datasheet and technical-reference register
 ```
+
+## Engineering records
+
+I am documenting the calculations and reasoning behind every important design decision. This includes component ratings, safety margins, alternatives considered and the tests needed before I accept a circuit block.
+
+- [Project specification](docs/project-specification.md)
+- [Design-decision log](docs/design-decisions.md)
+- [Protected power-input design](docs/power-input-design.md)
+- [Relay compatibility register](docs/relay-compatibility.md)
+- [Datasheet register](references/README.md)
 
 ## Development roadmap
 
