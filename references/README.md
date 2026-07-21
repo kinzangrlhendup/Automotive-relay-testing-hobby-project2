@@ -2,7 +2,7 @@
 
 I will keep links to the manufacturer datasheets and technical references used in this project here. I will prefer official manufacturer documents and record the exact part or circuit decision supported by each source.
 
-Last reviewed: 20 July 2026
+Last reviewed: 21 July 2026
 
 ## Component datasheets
 
@@ -21,6 +21,11 @@ Last reviewed: 20 July 2026
 | REF-003 | P-channel MOSFET reverse-battery protection | Texas Instruments | [Basics of Ideal Diodes](https://www.ti.com/lit/an/slvae57b/slvae57b.pdf) | MOSFET body-diode start-up and reverse-polarity operating principle |
 | REF-004 | Automotive reverse-battery protection | Texas Instruments | [Addressing Automotive Reverse Battery Protection](https://www.ti.com/lit/SNOAA94) | Automotive input-protection architecture and limitations |
 | REF-005 | Denso relay family data | Denso Electronics | [Relay product specifications](https://www.denso-electronics.com/en/basic-performance.php) | Initial relay-package, coil-current and contact-current reference values |
+| REF-009 | LTspice software and learning resources | Analog Devices | [Official LTspice page](https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) | Simulator overview, downloads and official learning material |
+| REF-010 | Transient simulation | Analog Devices | [LTspice Basics: Transient Simulations](https://www.analog.com/en/resources/media-center/videos/6368296727112.html) | Pulse stimulus, transient directives and waveform probing |
+| REF-011 | Third-party SPICE models | Analog Devices | [Importing third-party models](https://www.analog.com/en/resources/technical-articles/ltspice-how-to-import-third-party-models.html) | `.MODEL`, `.SUBCKT`, directives and model linking |
+| REF-012 | Parameter sweeps | Analog Devices | [Using the `.STEP` directive](https://www.analog.com/en/resources/technical-articles/ltspice-using-the-step-command-to-perform-repeated-analysis.html) | Repeated analysis over component and parameter values |
+| REF-013 | Piecewise-linear sources | Analog Devices | [Defining PWL voltage and current sources](https://www.analog.com/en/resources/technical-articles/ltspice-piecewise-linear-functions-for-voltage-current-sources.html) | Controlled supply ramps and time-voltage waveforms |
 
 ## Reference policy
 
