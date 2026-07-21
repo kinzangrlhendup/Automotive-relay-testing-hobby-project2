@@ -72,6 +72,7 @@ I am documenting the calculations and reasoning behind every important design de
 - [Project specification](docs/project-specification.md)
 - [Design-decision log](docs/design-decisions.md)
 - [Protected power-input design](docs/power-input-design.md)
+- [LTspice simulation tutorial and learning notes](docs/ltspice-simulation-tutorial.md)
 - [Relay compatibility register](docs/relay-compatibility.md)
 - [Datasheet register](references/README.md)
 
