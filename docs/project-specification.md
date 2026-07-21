@@ -16,7 +16,9 @@ I am developing a portable electronic tester for common nominal 12 V automotive 
 | Contact test current | Approximately 1 A |
 | Default test cycles | 10 |
 | Contact test duration | Short controlled pulses, to be calculated |
-| Logic supply | 5 V or 3.3 V, subject to controller selection |
+| Development controller | Arduino Nano Every |
+| Final custom-PCB controller | ATmega4809 in TQFP-48, subject to pin-allocation review |
+| Logic supply | Regulated 5 V from an LT8610; design target of at least 500 mA continuous |
 
 These values are design targets rather than final verified specifications. I will update them after simulation and prototype testing.
 

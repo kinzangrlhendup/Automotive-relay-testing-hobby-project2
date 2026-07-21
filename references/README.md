@@ -13,6 +13,8 @@ Last reviewed: 21 July 2026
 | REF-006 | RSS060P05HZG P-channel MOSFET | ROHM | [RSS060P05HZG product page and datasheet](https://www.rohm.com/products/mosfets/automotive/single-pch/rss060p05hzg-product) | Active automotive-grade physical candidate, voltage, current, on-resistance and SOP8 package |
 | REF-007 | EDZV12B 12 V Zener diode | ROHM | [EDZV12B product page and datasheet](https://www.rohm.com/products/diodes/zener-diodes/standard/edzv12b-product) | Gate-clamp voltage, test current, power and SOD-523 package |
 | REF-008 | EDZVFH12B automotive 12 V Zener diode | ROHM | [EDZVFH12B product page and datasheet](https://www.rohm.com/products/diodes/zener-diodes/automotive/edzvfh12b-product) | Automotive-grade physical gate-clamp candidate |
+| REF-014 | LT8610 synchronous buck regulator | Analog Devices | [LT8610 product page](https://www.analog.com/en/products/lt8610.html) and [Rev. D datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/lt8610.pdf) | Input range, output capability, 5 V reference circuit, feedback, soft-start, switching frequency, power-good and layout requirements |
+| REF-015 | ATmega4809 microcontroller | Microchip | [ATmega4808/4809 complete datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega4808-09-DataSheet-DS40002173C.pdf) | Supply range, memory, peripherals, package, clock and UPDI programming requirements |
 
 ## Design references
 
@@ -26,6 +28,7 @@ Last reviewed: 21 July 2026
 | REF-011 | Third-party SPICE models | Analog Devices | [Importing third-party models](https://www.analog.com/en/resources/technical-articles/ltspice-how-to-import-third-party-models.html) | `.MODEL`, `.SUBCKT`, directives and model linking |
 | REF-012 | Parameter sweeps | Analog Devices | [Using the `.STEP` directive](https://www.analog.com/en/resources/technical-articles/ltspice-using-the-step-command-to-perform-repeated-analysis.html) | Repeated analysis over component and parameter values |
 | REF-013 | Piecewise-linear sources | Analog Devices | [Defining PWL voltage and current sources](https://www.analog.com/en/resources/technical-articles/ltspice-piecewise-linear-functions-for-voltage-current-sources.html) | Controlled supply ramps and time-voltage waveforms |
+| REF-016 | Arduino Nano Every development platform | Arduino | [Nano Every hardware documentation](https://docs.arduino.cc/hardware/nano-every/) | Development-board capabilities and the prototype-to-custom-PCB controller plan |
 
 ## Reference policy
 

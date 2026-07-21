@@ -4,7 +4,7 @@ I am designing and building a universal tester for common 12 V automotive relays
 
 I want this tester to measure how the relay actually behaves. It will check the coil, identify the contact arrangement, measure switching time, cycle the relay repeatedly and test the contacts under a controlled load. I am also using interchangeable socket adapters so that I can support several relay packages without redesigning the main circuit.
 
-> **Project status:** Early design stage. I have frozen the initial requirements and I am starting with the protected 12 V power-input circuit.
+> **Project status:** Power-supply design and simulation. I have simulated the protected 12 V input and recorded the first successful LT8610 5 V logic-supply start-up. Physical component selection and bench validation remain in progress.
 
 ## Why I started this project
 
@@ -73,6 +73,7 @@ I am documenting the calculations and reasoning behind every important design de
 - [Design-decision log](docs/design-decisions.md)
 - [Protected power-input design](docs/power-input-design.md)
 - [LTspice simulation tutorial and learning notes](docs/ltspice-simulation-tutorial.md)
+- [Simulation 01: protected input and 5 V logic-supply start-up](docs/simulation-results/01-protected-input-and-5v-supply.md)
 - [Relay compatibility register](docs/relay-compatibility.md)
 - [Datasheet register](references/README.md)
 
