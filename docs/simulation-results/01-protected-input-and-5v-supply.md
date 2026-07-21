@@ -11,6 +11,19 @@
 
 I combined the protected 12 V input with an LT8610 synchronous buck converter. The purpose of this run was to check that the protected battery rail remained at 12 V, the new `5V_LOGIC` rail started in a controlled way and the `POWER_GOOD` signal did not indicate a valid supply before the 5 V output was close to regulation.
 
+## Circuit used for this run
+
+The image below records the complete LTspice circuit used for the nominal 12 V start-up simulation. I keep the editable circuit in `01_battery_input_protection.asc`; this PNG is included so the component values, net labels and LT8610 connections can also be reviewed directly in GitHub without opening LTspice.
+
+![Complete LTspice protected-input and LT8610 5 V buck-converter schematic](../../hardware/ltspice/results/01_protected_input_and_5v_supply_schematic.png)
+
+The circuit is divided into two functional blocks:
+
+1. Q1, D1, D2, R1, C1 and C2 protect and filter the vehicle-battery input, producing `PROTECTED_12V`.
+2. U1, C3–C6, L1, R3–R6 and the output components convert `PROTECTED_12V` into `5V_LOGIC` and generate `POWER_GOOD`.
+
+The 1 kΩ resistor on `PROTECTED_12V` and the 100 Ω resistor on `5V_LOGIC` are temporary simulation loads. They are not the final product loads.
+
 ![LTspice start-up waveform for the protected 12 V and 5 V logic supplies](../../hardware/ltspice/results/01_5v_logic_supply_startup.png)
 
 ## What the waveform shows
@@ -147,7 +160,7 @@ It does **not** yet prove:
 - behaviour during cranking dips, jump-start voltage or standard automotive pulses;
 - EMC performance or formal automotive compliance.
 
-The LTspice `.asc` source file was not included with the waveform supplied for this record. I need to export and commit that file from the design computer so another person can rerun the exact circuit rather than relying only on this screenshot and description.
+The editable `01_battery_input_protection.asc` file is the reproducible simulation source. The schematic and waveform PNG files are supporting records for viewing the circuit and its result directly in GitHub.
 
 ## Next simulation checks
 
@@ -167,4 +180,3 @@ Before I freeze the power section, I will run and record:
 - [Analog Devices LT8610 product page](https://www.analog.com/en/products/lt8610.html)
 - [Analog Devices LT8610 data sheet, Rev. D](https://www.analog.com/media/en/technical-documentation/data-sheets/lt8610.pdf)
 - [Microchip ATmega4808/4809 complete data sheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega4808-09-DataSheet-DS40002173C.pdf)
-
