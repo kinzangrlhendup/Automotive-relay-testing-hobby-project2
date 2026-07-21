@@ -36,7 +36,7 @@ I will use this document to record the reasoning behind the important technical 
 
 **Reason:** A correctly connected P-channel MOSFET can provide reverse-battery protection with much less voltage drop and power loss than a conventional series diode. It is also easier for me to understand and prototype than an ideal-diode controller with external N-channel MOSFETs.
 
-**Selected prototype device:** FQP47P06, subject to simulation and bench validation.
+**Selected simulation device:** RSS060P05 model. The RSS060P05HZG automotive-grade SOP8 version is the active physical candidate, subject to thermal, layout and bench validation.
 
 **Status:** Provisional.
 
@@ -69,3 +69,26 @@ I will use this document to record the reasoning behind the important technical 
 **Physical-part note:** The active automotive-grade MOSFET option is RSS060P05HZG in an SOP8 package. The automotive-grade Zener option is EDZVFH12B in a very small SOD-523 package. I will confirm that these packages are practical to assemble before freezing the PCB bill of materials.
 
 **Status:** Accepted for simulation. Physical parts remain provisional.
+
+
+## DD-008 — Use the ATmega4809 with a 5 V logic rail
+
+**Decision:** I will prototype the firmware with an Arduino Nano Every and use the bare ATmega4809 in a TQFP-48 package on the final custom PCB.
+
+**Reason:** The controller operates at 5 V, provides enough analogue inputs, timers, GPIO, program memory and SRAM for relay measurements, timing, the display and the user interface. The Nano Every gives me USB programming during development, while the final board can use the ATmega4809's single-wire UPDI interface without reproducing the complete development board.
+
+**Implementation note:** The final PCB will require local 100 nF decoupling at each supply pair, bulk rail capacitance, analogue-supply treatment, UPDI programming access and a verified safe state during reset and power-up.
+
+**Status:** Accepted as the controller direction. Final pin allocation and firmware validation remain open.
+
+## DD-009 — Generate the 5 V rail with an LT8610 buck regulator
+
+**Decision:** I will develop the logic supply around the LT8610 using the manufacturer's 5 V, approximately 700 kHz reference values.
+
+**Reason:** The protected input can reach automotive charging voltage and the logic load is provisionally estimated at 250 mA. A linear 7805 would dissipate approximately 1.75 W at 12 V input and 250 mA output, while the synchronous buck converter should be substantially more efficient. The LT8610 accepts up to 42 V and provides more current capability than the tester presently needs.
+
+**Selected simulation network:** 60.4 kΩ timing resistor, 10 nF soft-start capacitor, 4.7 µH inductor, 47 µF output capacitor, 1 MΩ/243 kΩ feedback divider, 10 pF feed-forward capacitor and 100 kΩ power-good pull-up.
+
+**Important limitation:** The high current rating is design headroom, not a reason to omit current and thermal checks. I still need to select a real inductor and capacitors, confirm derating and layout, and determine whether the final physical regulator ordering code meets the qualification level I want for this hobby project.
+
+**Status:** Nominal 12 V to 5 V start-up simulation passed with a temporary 100 Ω load. Input-range, load-step, ripple, tolerance and bench tests remain open.
