@@ -73,6 +73,7 @@ I am documenting the calculations and reasoning behind every important design de
 - [Design-decision log](docs/design-decisions.md)
 - [Protected power-input design](docs/power-input-design.md)
 - [LTspice simulation tutorial and learning notes](docs/ltspice-simulation-tutorial.md)
+- [KiCad schematic tutorial and hierarchy notes](docs/kicad-schematic-tutorial.md)
 - [Simulation 01: protected input and 5 V logic-supply start-up](docs/simulation-results/01-protected-input-and-5v-supply.md)
 - [Simulation 03: nominal relay-coil current measurement](docs/simulation-results/03-current-sense-amplifier.md)
 - [Simulation 08d: complete automatic relay-test sequence](docs/simulation-results/08d-complete-automatic-sequence.md)
