@@ -170,7 +170,78 @@ The `power_supply` sheet is responsible for accepting the raw battery connection
 
 ---
 
-## 10. Final checklist
+## 10. Why I use `PWR_FLAG`
+
+### 10.1 What problem it solves
+
+KiCad's Electrical Rules Checker does not calculate circuit voltages or understand automatically that a connector is attached to a battery. Instead, ERC checks the **electrical type** assigned to every symbol pin.
+
+A net containing one or more `Power input` pins is expected to be driven by a `Power output` pin. If KiCad sees only power-input and passive pins, it reports:
+
+```text
+Input Power pin not driven by any Output Power pins
+```
+
+This warning does not necessarily mean that the physical circuit lacks a supply. It means that KiCad cannot identify the supply source from the symbol pin types.
+
+### 10.2 What `PWR_FLAG` means
+
+I use a `PWR_FLAG` to tell ERC:
+
+> I have checked this net, and it is intentionally supplied by a valid power source.
+
+The flag acts as an ERC declaration with a `Power output` electrical type. It does **not**:
+
+- generate voltage;
+- carry or limit current;
+- connect two differently named nets;
+- add protection;
+- become a physical PCB component;
+- require a footprint;
+- appear as a purchased item in the normal BOM.
+
+The real voltage still comes from the battery, regulator or another physical source. The flag only gives ERC information that cannot be inferred from passive symbols.
+
+### 10.3 Why Project 2 needs three flags
+
+| Net | Real physical source | Why ERC could not recognise it |
+|---|---|---|
+| `12V_PROTECTED` | The vehicle battery through J5, F2 and the Q3 reverse-polarity MOSFET | The connector, fuse and MOSFET path does not present a recognised `Power output` pin to the protected rail |
+| `5V_LOGIC` | The LMR16006YQ buck converter through its switching stage and L1 | The final regulated rail is reached through the switching pin and passive inductor, so ERC does not see a direct power-output driver on the rail |
+| `GND` | Battery-negative connection at J5 pin 2 | A connector pin and GND power symbols do not themselves tell ERC that the net is driven |
+
+I therefore placed one `PWR_FLAG` directly on each of these three nets on the `power_supply` sheet.
+
+### 10.4 How I place a flag
+
+1. I press **P** to open the power-symbol chooser.
+2. I search for `PWR_FLAG`.
+3. I place the flag pin directly on the intended wire.
+4. I repeat only for nets that are genuinely supplied.
+5. I delete old ERC markers and run ERC again.
+
+I zoom in after placement because a flag that is visually close to a wire but not snapped onto it will not affect that net.
+
+### 10.5 When I should not use it
+
+I do not place a `PWR_FLAG` simply to silence every power error. Before adding one, I verify:
+
+- the physical source really exists;
+- the polarity and rail name are correct;
+- the fuse and protection path are connected;
+- the regulator input and output are not accidentally shorted;
+- the source can provide the required voltage and current;
+- the warning is caused by ERC pin-type limitations rather than an actual missing wire.
+
+If a power rail is genuinely disconnected, adding a flag would only hide the design error. The physical circuit must be corrected first.
+
+### 10.6 Project 2 result
+
+After placing flags on `12V_PROTECTED`, `5V_LOGIC` and `GND`, I deleted the previous ERC markers and reran the checker. The three `Input Power pin not driven` errors were cleared, confirming that ERC now recognises the intended supply sources. This result verifies the schematic declaration, not the electrical performance of the physical power supply.
+
+---
+
+## 11. Final checklist
 
 Before I consider a new hierarchical page complete, I verify:
 
@@ -188,7 +259,7 @@ Before I consider a new hierarchical page complete, I verify:
 
 ---
 
-## 11. Official reference
+## 12. Official reference
 
 - [KiCad 10 Schematic Editor documentation — hierarchical schematics and sheet pins](https://docs.kicad.org/10.0/en/eeschema/eeschema.html)
 - [KiCad 10 Introduction — schematic sheets and hierarchy](https://docs.kicad.org/10.0/en/introduction/introduction.html)
