@@ -4,7 +4,7 @@ I am designing and building a universal tester for common 12 V automotive relays
 
 I want this tester to measure how the relay actually behaves. It will check the coil, identify the contact arrangement, measure switching time, cycle the relay repeatedly and test the contacts under a controlled load. I am also using interchangeable socket adapters so that I can support several relay packages without redesigning the main circuit.
 
-> **Project status:** Relay-coil drive and current measurement are now under simulation. I have validated the nominal 12 V coil-current path, the 0.5 Ω shunt, the ×20 current-sense stage and the filtered ADC signal. Fault-case simulation, physical component selection and bench validation remain in progress.
+> **Project status:** I have completed the essential nominal LTspice functional sequence for a simulated five-pin changeover relay. The model now performs a low-current polarity pre-check, applies full coil power, measures coil current, checks terminals 87 and 87a, and confirms that both contacts begin returning after release. The ATmega4809 implementation, tolerance analysis, physical component selection and bench validation remain in progress.
 
 ## Why I started this project
 
@@ -75,6 +75,7 @@ I am documenting the calculations and reasoning behind every important design de
 - [LTspice simulation tutorial and learning notes](docs/ltspice-simulation-tutorial.md)
 - [Simulation 01: protected input and 5 V logic-supply start-up](docs/simulation-results/01-protected-input-and-5v-supply.md)
 - [Simulation 03: nominal relay-coil current measurement](docs/simulation-results/03-current-sense-amplifier.md)
+- [Simulation 08d: complete automatic relay-test sequence](docs/simulation-results/08d-complete-automatic-sequence.md)
 - [Relay compatibility register](docs/relay-compatibility.md)
 - [Datasheet register](references/README.md)
 
@@ -83,6 +84,7 @@ I am documenting the calculations and reasoning behind every important design de
 - [x] Define the project scope and initial requirements
 - [x] Register the first reference relay
 - [x] Simulate the nominal relay-coil drive and current-measurement path
+- [x] Simulate the nominal automatic polarity, coil and changeover-contact sequence
 - [ ] Design the protected 12 V input and logic supply
 - [ ] Design the bidirectional relay-coil driver
 - [ ] Design coil-current measurement and protection
