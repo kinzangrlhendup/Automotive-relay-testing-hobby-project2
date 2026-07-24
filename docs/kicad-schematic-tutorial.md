@@ -241,7 +241,165 @@ After placing flags on `12V_PROTECTED`, `5V_LOGIC` and `GND`, I deleted the prev
 
 ---
 
-## 11. Final checklist
+## 12. Creating and assigning custom PCB footprints
+
+### 12.1 Symbol and footprint are different
+
+In KiCad, the **symbol** describes a component's electrical behaviour in the schematic. The **footprint** describes the physical copper pads, holes, outline and component space on the PCB.
+
+Before assigning a footprint, I verify:
+
+- the package dimensions against the component datasheet;
+- the number and physical positions of the leads;
+- the relationship between symbol pins and physical package pins;
+- pad sizes, drill sizes and soldering method;
+- pin 1, polarity and orientation markings;
+- courtyard and mechanical clearance;
+- whether the part is actually mounted on the PCB.
+
+I do not edit KiCad's global libraries directly. A library update could overwrite those changes, and another computer would not automatically receive them.
+
+### 12.2 Create a project-specific footprint library
+
+I keep custom footprints with the project:
+
+1. I open **Footprint Editor**.
+2. I select **File → New Library**.
+3. I choose **Project** rather than Global.
+4. I save the library inside the project folder as `Project2_Custom.pretty`.
+5. I use `Project2_Custom` as its nickname.
+6. I save the project.
+
+KiCad records the project-library relationship in `fp-lib-table`. Both the `.pretty` directory and `fp-lib-table` must be committed to GitHub.
+
+### 12.3 Copy and modify an existing footprint
+
+When a standard footprint already has the correct mechanical dimensions, I use it as a starting point:
+
+1. I open the closest matching footprint in **Footprint Editor**.
+2. I verify its dimensions against the datasheet.
+3. I select **File → Save As**.
+4. I choose `Project2_Custom`.
+5. I give the copy a descriptive name.
+6. I edit only the project copy and save it with **Ctrl+S**.
+
+Copying a footprint saves time, but every pad still has to be checked against the component datasheet.
+
+### 12.4 Remap pads when one terminal uses several physical leads
+
+KiCad connects a symbol pin to every footprint pad carrying the same number. Duplicate footprint-pad numbers are therefore valid when several package leads are internally connected to one transistor terminal.
+
+For Q3, the schematic symbol uses:
+
+| Symbol pin | Terminal |
+|---:|---|
+| 1 | Gate |
+| 2 | Source |
+| 3 | Drain |
+
+The RSS060P05HZG package uses:
+
+| Physical SO-8 leads | Terminal | Custom footprint number |
+|---|---|---:|
+| 1, 2 and 3 | Source | 2 |
+| 4 | Gate | 1 |
+| 5, 6, 7 and 8 | Drain | 3 |
+
+I created its footprint as follows:
+
+1. I opened `Package_SO:SO-8_3.9x4.9mm_P1.27mm`.
+2. I saved a project copy named `SO-8_RSS060P05HZG_GSD`.
+3. I hovered over each pad and pressed **E**.
+4. I changed the left-side pad numbers from top to bottom to `2, 2, 2, 1`.
+5. I changed all four right-side pads to `3`.
+6. I saved the footprint.
+
+```text
+Left side, top to bottom:  2  2  2  1
+Right side, top to bottom: 3  3  3  3
+```
+
+This preserves the SO-8 geometry while matching the three-pin MOSFET symbol. I never assume that a generic SO-8 footprint's original pad numbers match a multi-lead MOSFET.
+
+### 12.5 Use an official footprint when it already matches
+
+A custom footprint is unnecessary when KiCad already contains the exact manufacturer footprint and its pins match the symbol.
+
+For SW3:
+
+1. I replaced the two-pin push-switch symbol with `Switch:SW_SPDT`.
+2. I connected pin 2, common, to `RELAY_MODE_5PIN_N`.
+3. I connected pin 1 to GND.
+4. I marked pin 3 intentionally unconnected.
+5. I assigned `Button_Switch_SMD:SW_SPDT_CK_JS102011SAQN`.
+
+The official footprint already matches KiCad's SPDT symbol, so I did not copy or renumber it.
+
+### 12.6 Create a footprint from scratch
+
+If no suitable footprint exists:
+
+1. I select **File → New Footprint** in Footprint Editor.
+2. I save it in `Project2_Custom`.
+3. I set a logical origin, normally the component centre or pin 1.
+4. I place pads using the manufacturer's recommended land pattern.
+5. For every pad, I set its number, type, shape, position, dimensions, drill and layers.
+6. I draw the component body on `F.Fab`.
+7. I add a restrained outline and pin-1 marker on `F.Silkscreen`.
+8. I draw `F.Courtyard` around the maximum assembly space.
+9. I add polarity or orientation marks where required.
+10. I optionally link a verified 3D model.
+11. I compare the finished footprint with the datasheet again.
+
+I do not estimate pad spacing from a photograph. The manufacturer's dimensioned drawing or recommended land pattern is the controlling source.
+
+### 12.7 Assign the custom footprint
+
+From **Schematic Editor**:
+
+1. I select **Tools → Assign Footprints**.
+2. I select the required symbol.
+3. If necessary, I select **No Filtering**.
+4. I search for the project footprint.
+5. For Q3, I assign `Project2_Custom:SO-8_RSS060P05HZG_GSD`.
+6. I click **Apply, Save Schematic & Continue**.
+7. I save the schematic.
+
+### 12.8 Validate before routing
+
+Before routing, I check:
+
+- symbol pins and footprint pads agree;
+- duplicated pads belong to the same internal terminal;
+- gate, source and drain are not interchanged;
+- pin 1 and polarity markers are visible;
+- package dimensions match the purchased part;
+- drill diameters suit the actual leads;
+- connector pitch and orientation are correct;
+- courtyards do not overlap;
+- external or panel-mounted parts are excluded from the board when appropriate;
+- ERC passes;
+- **Update PCB from Schematic** completes without footprint errors;
+- the ratsnest matches the expected electrical connections.
+
+For an unfamiliar custom footprint, I also print the layout at **1:1 scale** and place the real component on the paper before ordering the board.
+
+### 12.9 Files committed to GitHub
+
+A portable project includes:
+
+- the schematic files containing footprint assignments;
+- `Project2_Custom.pretty/`;
+- every custom `.kicad_mod` file;
+- `fp-lib-table`;
+- the PCB file after footprints are imported;
+- the datasheets or reference links used to verify the mapping.
+
+Without the custom library and `fp-lib-table`, another computer may open the schematic but fail to resolve its project-specific footprints.
+
+---
+
+## 13. Final checklist
 
 Before I consider a new hierarchical page complete, I verify:
 
@@ -259,9 +417,9 @@ Before I consider a new hierarchical page complete, I verify:
 
 ---
 
-## 12. Official reference
+## 14. Official reference
 
 - [KiCad 10 Schematic Editor documentation — hierarchical schematics and sheet pins](https://docs.kicad.org/10.0/en/eeschema/eeschema.html)
 - [KiCad 10 Introduction — schematic sheets and hierarchy](https://docs.kicad.org/10.0/en/introduction/introduction.html)
 
-I will extend this guide later with symbol selection, component fields, annotation, footprint assignment, ERC, PCB transfer, layout, DRC and fabrication-output checks.
+I will extend this guide later with PCB placement, net classes, routing, copper zones, DRC and fabrication-output checks.
